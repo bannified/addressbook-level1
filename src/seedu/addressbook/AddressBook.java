@@ -14,15 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /*
  * NOTE : =============================================================
@@ -105,6 +97,11 @@ public class AddressBook {
             + PERSON_DATA_PREFIX_PHONE + "PHONE_NUMBER "
             + PERSON_DATA_PREFIX_EMAIL + "EMAIL";
     private static final String COMMAND_ADD_EXAMPLE = COMMAND_ADD_WORD + " John Doe p/98765432 e/johnd@gmail.com";
+
+    private static final String COMMAND_SORT_WORD = "sort";
+    private static final String COMMAND_SORT_DESC = "Sorts the current list, given a property (email, phone, name)";
+    private static final String COMMAND_SORT_PARAMETER = "property";
+    private static final String COMMAND_SORT_EXAMPLE = COMMAND_SORT_WORD + " phone";
 
     private static final String COMMAND_FIND_WORD = "find";
     private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
@@ -370,6 +367,8 @@ public class AddressBook {
         switch (commandType) {
             case COMMAND_ADD_WORD:
                 return executeAddPerson(commandArgs);
+            case COMMAND_SORT_WORD:
+                return executeSortPersons(commandArgs);
             case COMMAND_FIND_WORD:
                 return executeFindPersons(commandArgs);
             case COMMAND_LIST_WORD:
@@ -491,6 +490,49 @@ public class AddressBook {
         }
         return matchedPersons;
     }
+
+    private static String executeSortPersons(String commandArgs) {
+        String sortArg = commandArgs.trim().toLowerCase();
+        ArrayList<HashMap<PersonProperty, String>> updatedList = latestPersonListingView;
+
+        switch (sortArg) {
+            case "name":
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.NAME);
+                break;
+            case "phone":
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.PHONE);
+                break;
+            case "email":
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.EMAIL);
+                break;
+            default:
+                return getMessageForInvalidCommandInput(COMMAND_SORT_WORD, getUsageInfoForSortCommand());
+        }
+
+        showToUser(updatedList);
+        return getMessageForPersonsDisplayedSummary(updatedList);
+    }
+
+    private static ArrayList<HashMap<PersonProperty, String>> sortPersonsListByProperty(ArrayList<HashMap<PersonProperty, String>> personsList, PersonProperty property) {
+        personsList.sort(new Comparator<HashMap<PersonProperty, String>>() {
+            @Override
+            public int compare(HashMap<PersonProperty, String> o1, HashMap<PersonProperty, String> o2) {
+                if (o1.get(property) == null)
+                    return -1;
+                else if (o2.get(property) == null)
+                    return 1;
+                else {
+                    return o1.get(property).compareTo(o2.get(property));
+                }
+            }
+        });
+        return personsList;
+    }
+
+//    private class PersonNameComparator implements Comparator<HashMap<PersonProperty, String>> {
+//        @Override
+//        public int compare(HashMap<PersonProperty, String> p1, HashMap<PersonProperty, String>)
+//    }
 
     /**
      * Deletes person identified using last displayed index.
@@ -1084,6 +1126,7 @@ public class AddressBook {
         return getUsageInfoForAddCommand() + LS
                 + getUsageInfoForFindCommand() + LS
                 + getUsageInfoForViewCommand() + LS
+                + getUsageInfoForSortCommand() + LS
                 + getUsageInfoForDeleteCommand() + LS
                 + getUsageInfoForClearCommand() + LS
                 + getUsageInfoForExitCommand() + LS
@@ -1102,6 +1145,13 @@ public class AddressBook {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_FIND_WORD, COMMAND_FIND_DESC) + LS
                 + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_FIND_PARAMETERS) + LS
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_FIND_EXAMPLE) + LS;
+    }
+
+    /** Returns the string for showing 'find' command usage instruction */
+    private static String getUsageInfoForSortCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_SORT_WORD, COMMAND_SORT_DESC) + LS
+                + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_SORT_PARAMETER) + LS
+                + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_SORT_EXAMPLE) + LS;
     }
 
     /** Returns the string for showing 'delete' command usage instruction */
