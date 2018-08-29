@@ -505,14 +505,7 @@ public class AddressBook {
         String[] sortArgs = commandArgs.trim().toLowerCase().split(" " );
 
         String sortParam = sortArgs[0];
-        boolean ascending = true;
-
-        if (sortArgs.length > 1) {
-            if (isInteger(sortArgs[1])) {
-                int orderParam = Integer.parseInt(sortArgs[1]);
-                ascending = (orderParam < 0) ? false : true;
-            }
-        }
+        boolean ascending = isSortAscending(sortArgs);
 
         ArrayList<HashMap<PersonProperty, String>> updatedList = latestPersonListingView;
 
@@ -532,6 +525,22 @@ public class AddressBook {
 
         showToUser(updatedList);
         return getMessageForPersonsDisplayedSummary(updatedList);
+    }
+
+    /**
+     * Determines if sort command is ascending or not.
+     * @param sortArgs
+     * @return true if ascending sort.
+     */
+    private static boolean isSortAscending(String[] sortArgs) {
+        boolean ascending = true;
+        if (sortArgs.length > 1) {
+            if (isInteger(sortArgs[1])) {
+                int orderParam = Integer.parseInt(sortArgs[1]);
+                ascending = (orderParam < 0) ? false : true;
+            }
+        }
+        return ascending;
     }
 
     /**
