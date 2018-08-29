@@ -62,9 +62,9 @@
 || list: Displays all persons as a list with index numbers.
 || 	Example: list
 || 
-|| sort: Sorts the current list, given a property (email, phone, name)
-|| 	Parameters: property
-|| 	Example: sort phone
+|| sort: Sorts the current list, given a property (email, phone, name), and optionally a number indicating the sort order (negative number for descending), defaults to ascending order.
+|| 	Parameters: PROPERTY ORDER
+|| 	Example: sort phone -1
 || 
 || delete: Deletes a person identified by the index number used in the last find/list call.
 || 	Parameters: INDEX
@@ -190,16 +190,16 @@
 || ===================================================
 || Enter command: || [Command entered:  sort hehehe]
 || Invalid command format: sort 
-|| sort: Sorts the current list, given a property (email, phone, name)
-|| 	Parameters: property
-|| 	Example: sort phone
+|| sort: Sorts the current list, given a property (email, phone, name), and optionally a number indicating the sort order (negative number for descending), defaults to ascending order.
+|| 	Parameters: PROPERTY ORDER
+|| 	Example: sort phone -1
 || 
 || ===================================================
 || Enter command: || [Command entered:  sort naem]
 || Invalid command format: sort 
-|| sort: Sorts the current list, given a property (email, phone, name)
-|| 	Parameters: property
-|| 	Example: sort phone
+|| sort: Sorts the current list, given a property (email, phone, name), and optionally a number indicating the sort order (negative number for descending), defaults to ascending order.
+|| 	Parameters: PROPERTY ORDER
+|| 	Example: sort phone -1
 || 
 || ===================================================
 || Enter command: || [Command entered:  sort name]
@@ -223,6 +223,56 @@
 || 6 persons found!
 || ===================================================
 || Enter command: || [Command entered:  sort phone]
+|| 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
+|| 	2. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	3. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 	4. Batsy Poo  Phone Number: 422222  Email: dztsyPoo@gmail.com
+|| 	5. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	6. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
+|| 
+|| 6 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  sort name -1]
+|| 	1. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
+|| 	2. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	3. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 	4. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	5. Batsy Poo  Phone Number: 422222  Email: dztsyPoo@gmail.com
+|| 	6. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
+|| 
+|| 6 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  sort name 1]
+|| 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
+|| 	2. Batsy Poo  Phone Number: 422222  Email: dztsyPoo@gmail.com
+|| 	3. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	4. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 	5. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	6. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
+|| 
+|| 6 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  sort name +45-2+15]
+|| 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
+|| 	2. Batsy Poo  Phone Number: 422222  Email: dztsyPoo@gmail.com
+|| 	3. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	4. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 	5. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	6. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
+|| 
+|| 6 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  sort email asdzcka2135JDasd]
+|| 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
+|| 	2. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	3. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 	4. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	5. Batsy Poo  Phone Number: 422222  Email: dztsyPoo@gmail.com
+|| 	6. Esther Potato  Phone Number: 555555  Email: esther@notreal.potato
+|| 
+|| 6 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  sort phone --12352]
 || 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
 || 	2. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
 || 	3. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg

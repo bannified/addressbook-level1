@@ -58,6 +58,15 @@
   sort email
   sort phone
 
+  # sorting by ascending and descending
+  sort name -1
+  sort name 1
+  
+  # sort with invalid order parameter (non-integers)
+  sort name +45-2+15
+  sort email asdzcka2135JDasd
+  sort phone --12352
+
 ##########################################################
 # test find persons command
 ##########################################################

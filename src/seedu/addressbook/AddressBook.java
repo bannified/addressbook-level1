@@ -99,9 +99,12 @@ public class AddressBook {
     private static final String COMMAND_ADD_EXAMPLE = COMMAND_ADD_WORD + " John Doe p/98765432 e/johnd@gmail.com";
 
     private static final String COMMAND_SORT_WORD = "sort";
-    private static final String COMMAND_SORT_DESC = "Sorts the current list, given a property (email, phone, name)";
-    private static final String COMMAND_SORT_PARAMETER = "property";
-    private static final String COMMAND_SORT_EXAMPLE = COMMAND_SORT_WORD + " phone";
+    private static final String COMMAND_SORT_DESC = "Sorts the current list, given a property (email, phone, name)"
+            + ", and optionally a number indicating the sort order (negative number for descending), "
+            + "defaults to ascending order." ;
+    private static final String COMMAND_SORT_PARAMETERS = "PROPERTY"
+            + " ORDER";
+    private static final String COMMAND_SORT_EXAMPLE = COMMAND_SORT_WORD + " phone" + " -1";
 
     private static final String COMMAND_FIND_WORD = "find";
     private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
@@ -499,18 +502,29 @@ public class AddressBook {
      * @return feedback display message for the operation result
      */
     private static String executeSortPersons(String commandArgs) {
-        String sortArg = commandArgs.trim().toLowerCase();
+        String[] sortArgs = commandArgs.trim().toLowerCase().split(" " );
+
+        String sortParam = sortArgs[0];
+        boolean ascending = true;
+
+        if (sortArgs.length > 1) {
+            if (isInteger(sortArgs[1])) {
+                int orderParam = Integer.parseInt(sortArgs[1]);
+                ascending = (orderParam < 0) ? false : true;
+            }
+        }
+
         ArrayList<HashMap<PersonProperty, String>> updatedList = latestPersonListingView;
 
-        switch (sortArg) {
+        switch (sortParam) {
             case "name":
-                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.NAME);
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.NAME, ascending);
                 break;
             case "phone":
-                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.PHONE);
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.PHONE, ascending);
                 break;
             case "email":
-                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.EMAIL);
+                updatedList = sortPersonsListByProperty(updatedList, PersonProperty.EMAIL, ascending);
                 break;
             default:
                 return getMessageForInvalidCommandInput(COMMAND_SORT_WORD, getUsageInfoForSortCommand());
@@ -521,15 +535,18 @@ public class AddressBook {
     }
 
     /**
-     * Sorts a list of persons' details out according to a PersonProperty (ascending by default).
+     * Sorts a list of persons' details out according to a PersonProperty.
      *
      * @param personsList The list of people to sort.
      * @param property The PersonProperty to sort the list by.
+     * @param ascending if true, sorts in ascending order.
      * @return A sorted list of people.
      */
     private static ArrayList<HashMap<PersonProperty, String>> sortPersonsListByProperty(
             ArrayList<HashMap<PersonProperty, String>> personsList,
-            PersonProperty property) {
+            PersonProperty property,
+            boolean ascending) {
+        int sign = (ascending) ? 1 : -1;
         personsList.sort(new Comparator<HashMap<PersonProperty, String>>() {
             @Override
             public int compare(HashMap<PersonProperty, String> o1, HashMap<PersonProperty, String> o2) {
@@ -538,11 +555,25 @@ public class AddressBook {
                 else if (o2.get(property) == null)
                     return 1;
                 else {
-                    return o1.get(property).compareTo(o2.get(property));
+                    return sign * o1.get(property).compareTo(o2.get(property));
                 }
             }
         });
         return personsList;
+    }
+
+    /**
+     * Checks if a given string is a valid integer.
+     * @param strNum
+     * @return true if given string can be parsed as an integer.
+     */
+    public static boolean isInteger(String strNum) {
+        try {
+            Integer num = Integer.parseInt(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1161,7 +1192,7 @@ public class AddressBook {
     /** Returns the string for showing 'find' command usage instruction */
     private static String getUsageInfoForSortCommand() {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_SORT_WORD, COMMAND_SORT_DESC) + LS
-                + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_SORT_PARAMETER) + LS
+                + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_SORT_PARAMETERS) + LS
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_SORT_EXAMPLE) + LS;
     }
 
