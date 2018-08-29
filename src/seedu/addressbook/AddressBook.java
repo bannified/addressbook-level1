@@ -491,6 +491,13 @@ public class AddressBook {
         return matchedPersons;
     }
 
+    /**
+     * Sorts the latest list of people by a given parameter.
+     * The parameter is according to the string passed as an argument after the command.
+     *
+     * @param commandArgs full command args string from the user
+     * @return feedback display message for the operation result
+     */
     private static String executeSortPersons(String commandArgs) {
         String sortArg = commandArgs.trim().toLowerCase();
         ArrayList<HashMap<PersonProperty, String>> updatedList = latestPersonListingView;
@@ -513,7 +520,16 @@ public class AddressBook {
         return getMessageForPersonsDisplayedSummary(updatedList);
     }
 
-    private static ArrayList<HashMap<PersonProperty, String>> sortPersonsListByProperty(ArrayList<HashMap<PersonProperty, String>> personsList, PersonProperty property) {
+    /**
+     * Sorts a list of persons' details out according to a PersonProperty (ascending by default).
+     *
+     * @param personsList The list of people to sort.
+     * @param property The PersonProperty to sort the list by.
+     * @return A sorted list of people.
+     */
+    private static ArrayList<HashMap<PersonProperty, String>> sortPersonsListByProperty(
+            ArrayList<HashMap<PersonProperty, String>> personsList,
+            PersonProperty property) {
         personsList.sort(new Comparator<HashMap<PersonProperty, String>>() {
             @Override
             public int compare(HashMap<PersonProperty, String> o1, HashMap<PersonProperty, String> o2) {
@@ -528,11 +544,6 @@ public class AddressBook {
         });
         return personsList;
     }
-
-//    private class PersonNameComparator implements Comparator<HashMap<PersonProperty, String>> {
-//        @Override
-//        public int compare(HashMap<PersonProperty, String> p1, HashMap<PersonProperty, String>)
-//    }
 
     /**
      * Deletes person identified using last displayed index.
